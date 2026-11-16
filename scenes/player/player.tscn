@@ -1,0 +1,29 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/player/player.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/components/health_component.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/components/hitbox_component.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/components/weapon_component.gd" id="4"]
+[ext_resource type="Resource" path="res://resources/player/player_default.tres" id="5"]
+
+[sub_resource type="CircleShape2D" id="shape"]
+radius = 4.0
+
+[node name="Player" type="Node2D"]
+script = ExtResource("1")
+data = ExtResource("5")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("2")
+
+[node name="HitboxComponent" type="Area2D" parent="." node_paths=PackedStringArray("health")]
+collision_layer = 1
+collision_mask = 0
+script = ExtResource("3")
+health = NodePath("../HealthComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
+shape = SubResource("shape")
+
+[node name="WeaponComponent" type="Node2D" parent="."]
+script = ExtResource("4")

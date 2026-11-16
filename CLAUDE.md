@@ -191,9 +191,28 @@ Que haya controles táctiles está decidido; el esquema concreto es una propuest
 Ya existe en el repositorio. Usa valores **provisionales** que el equipo aún no ha confirmado; cambiarlos es barato:
 
 - Resolución base 720×1280 en `project.godot`. `scripts/core/playfield.gd` centra el campo y deja el espacio sobrante para el HUD (a los lados en escritorio, arriba y abajo en móvil).
-- Acciones de entrada: `move_*` (flechas y WASD), `focus` (Shift), `shoot` (Z), `ability` (X), `pause` (Esc). Sin mando por ahora.
+- Acciones de entrada: `move_*` (flechas y WASD), `focus` (Shift), `shoot` (Z, manteniendo; decidido), `ability` (X), `pause` (Esc). Sin mando por ahora.
 - Capas de física 2D: 1 jugador, 2 enemigos, 3 disparos_jugador, 4 barreras, 5 powerups (constantes en `scripts/core/layers.gd`).
 - Carpetas: `scenes/`, `scripts/components/`, `scripts/core/`, `resources/`, `assets/`, `shaders/`, `tools/` (Python; Godot la ignora).
+
+### Estado del prototipo jugable (2026-11-16)
+
+`scenes/main/main.tscn` es una escena de pruebas, no un nivel: una fila de 5 Bacteriófagos Menores que reaparece al eliminarla.
+
+- **Jugador** (`scripts/player/`, balance en `resources/player/player_default.tres`): movimiento, *Focus* (muestra *hitbox* y radio de *graze*), vidas con invulnerabilidad y parpadeo, *graze* que carga una barra, y arrastre táctil relativo. Al quedarse sin vidas la escena se reinicia.
+- **`BulletManager`** (`scripts/bullets/`): arrays empaquetados, colisión por distancia y dibujo con círculos aditivos. Jugador, enemigos y el gestor deben ser hijos directos de `Playfield`.
+- **`BulletPattern`**: por ahora solo abanico (también disparo único apuntado) y anillo. Faltan espiral y muro con huecos.
+- **Enemigo** (`scripts/enemies/`): `Enemy.tscn` + `EnemyData` + `TierData` como en la propuesta. Solo existen el Bacteriófago Menor y el rango Regular.
+
+Provisional, a sustituir:
+
+- La habilidad del *graze* es una bomba que limpia las balas enemigas (decisión n.º 6 abierta).
+- La oscilación del enemigo vive en `EnemyData`; pasará a `MovementPattern`.
+- `TierData.tint` es un color plano; pasará a `Gradient` con el shader de paleta.
+- Todo se dibuja con formas por código y el HUD es una etiqueta de texto.
+- En táctil no hay todavía botones de *Focus* ni de habilidad (llegan con el HUD).
+- Chocar con el cuerpo de un enemigo no hace daño.
+- Todos los valores de balance son iniciales y sin probar por el equipo.
 
 ## 8. Especificación de assets generados [Propuesto]
 
@@ -240,12 +259,12 @@ Pregunta al equipo antes de asumir cualquiera de estas.
 
 1. Resolución y formato: confirmar la proporción del campo de juego (propuesta: 720×1280 con disposición adaptable, ver sección 7).
 2. ~~Plataformas~~: resuelto el 2026-11-16, versión web única para PC y Android con controles táctiles (ver sección 1).
-3. Controles: táctil decidido; falta confirmar su esquema (sección 7) y, en PC, ¿teclado, mando? ¿Disparo automático o manteniendo un botón?
+3. Controles: decidido teclado con disparo manteniendo Z (2026-11-16) y táctil con disparo automático mientras se toca. Falta confirmar el resto del esquema táctil (sección 7) y si habrá mando.
 4. ~~Lenguaje~~: resuelto el 2026-11-16, GDScript (ver sección 2).
 
 **Sistemas del jugador**
 
-5. Vida y fallo: ¿vidas, barra de salud o un golpe? ¿Continuaciones?
+5. Vida y fallo: decidido sistema de vidas (2026-11-16). Falta: cuántas (provisional: 3), segundos de invulnerabilidad (provisional: 2) y si hay continuaciones.
 6. Habilidad del *graze*: ¿bomba, láser o a elección?
 7. *Power-ups*: tipos y si se conservan entre niveles.
 8. Progresión: ¿mejoras permanentes o tienda entre niveles?

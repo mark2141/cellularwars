@@ -186,6 +186,15 @@ Que haya controles táctiles está decidido; el esquema concreto es una propuest
 - Botones en pantalla para *Focus* y para la habilidad del *graze*.
 - Pantalla de «toca para empezar» (el navegador no reproduce audio hasta el primer toque) y botón de pantalla completa.
 
+### Estado del esqueleto (2026-11-16)
+
+Ya existe en el repositorio. Usa valores **provisionales** que el equipo aún no ha confirmado; cambiarlos es barato:
+
+- Resolución base 720×1280 en `project.godot`. `scripts/core/playfield.gd` centra el campo y deja el espacio sobrante para el HUD (a los lados en escritorio, arriba y abajo en móvil).
+- Acciones de entrada: `move_*` (flechas y WASD), `focus` (Shift), `shoot` (Z), `ability` (X), `pause` (Esc). Sin mando por ahora.
+- Capas de física 2D: 1 jugador, 2 enemigos, 3 disparos_jugador, 4 barreras, 5 powerups (constantes en `scripts/core/layers.gd`).
+- Carpetas: `scenes/`, `scripts/components/`, `scripts/core/`, `resources/`, `assets/`, `shaders/`, `tools/` (Python; Godot la ignora).
+
 ## 8. Especificación de assets generados [Propuesto]
 
 - Fondo sólido **verde puro** (no magenta: choca con la paleta de rojos y púrpuras).

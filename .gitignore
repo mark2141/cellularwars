@@ -1,9 +1,10 @@
-# Godot 4
+# Godot 4+ specific ignores
 .godot/
-*.translation
-export_presets.cfg
-/build/
+/android/
+
+# Exportaciones y credenciales locales (ideal para Itch.io)
 /export/
+export_credentials.cfg
 
 # Python (scripts de assets)
 __pycache__/

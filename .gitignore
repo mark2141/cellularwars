@@ -1,0 +1,15 @@
+# Godot 4
+.godot/
+*.translation
+export_presets.cfg
+/build/
+/export/
+
+# Python (scripts de assets)
+__pycache__/
+*.pyc
+.venv/
+
+# Sistema
+.DS_Store
+Thumbs.db

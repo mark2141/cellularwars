@@ -15,7 +15,7 @@ Actúa como arquitecto técnico y asistente de desarrollo. Prioriza soluciones l
 - **Sistema de *Graze*:** pasar cerca de proyectiles sin recibir daño carga una barra de habilidad especial (bomba limpia-pantalla o láser cargado; falta elegir).
 - **Temática:** invasión microscópica. El jugador controla un nanobot médico (o leucocito modificado) que recorre el torrente sanguíneo y los órganos de un organismo infectado.
 - **Estética:** tonos biológicos profundos (rojos venosos, púrpuras, azules oscuros) con proyectiles bioluminiscentes (esporas, espinas celulares, descargas nerviosas).
-- **Plataforma de lanzamiento:** itch.io.
+- **Plataforma de lanzamiento:** itch.io, con una única versión web jugable en navegador de PC y de Android, con controles táctiles. Un APK instalable queda como posible añadido posterior, no como objetivo inicial.
 
 ## 2. Tecnología [Decidido]
 
@@ -170,9 +170,21 @@ class_name TierData extends Resource
 - Brillo bioluminiscente con mezcla aditiva y halo en el propio sprite, sin posprocesado.
 - Los SVG se rasterizan al importarlos; hay que fijar la escala de importación según la resolución base.
 
-### Resolución [Propuesto, sin confirmar]
+### Resolución y disposición [Propuesto, sin confirmar]
 
-Campo de juego vertical de 720×960 centrado en una ventana de 1280×960, con el HUD en los laterales.
+La propuesta original (campo de 720×960 con el HUD a los lados, en ventana de 1280×960) no encaja en un teléfono en vertical, así que queda sustituida por esta:
+
+- Campo de juego vertical más alto, por ejemplo 720×1280. Cambia el ritmo de las oleadas respecto a 720×960 porque hay más recorrido vertical.
+- Disposición adaptable: en escritorio el campo va centrado con el HUD a los lados; en móvil ocupa todo el ancho con el HUD arriba y abajo. El código de juego es el mismo; solo cambian el HUD y la capa de entrada.
+
+### Controles táctiles [Propuesto]
+
+Que haya controles táctiles está decidido; el esquema concreto es una propuesta.
+
+- Movimiento por arrastre relativo (la nave sigue el desplazamiento del dedo, no salta a su posición).
+- Disparo automático en táctil.
+- Botones en pantalla para *Focus* y para la habilidad del *graze*.
+- Pantalla de «toca para empezar» (el navegador no reproduce audio hasta el primer toque) y botón de pantalla completa.
 
 ## 8. Especificación de assets generados [Propuesto]
 
@@ -217,9 +229,9 @@ Pregunta al equipo antes de asumir cualquiera de estas.
 
 **Bloquean el esqueleto**
 
-1. Resolución y formato (confirmar la propuesta de 720×960 en ventana de 1280×960).
-2. Plataformas: ¿solo navegador, también Windows, también móvil con control táctil?
-3. Controles: ¿teclado, mando? ¿Disparo automático o manteniendo un botón?
+1. Resolución y formato: confirmar la proporción del campo de juego (propuesta: 720×1280 con disposición adaptable, ver sección 7).
+2. ~~Plataformas~~: resuelto el 2026-11-16, versión web única para PC y Android con controles táctiles (ver sección 1).
+3. Controles: táctil decidido; falta confirmar su esquema (sección 7) y, en PC, ¿teclado, mando? ¿Disparo automático o manteniendo un botón?
 4. ~~Lenguaje~~: resuelto el 2026-11-16, GDScript (ver sección 2).
 
 **Sistemas del jugador**

@@ -22,7 +22,7 @@ Actúa como arquitecto técnico y asistente de desarrollo. Prioriza soluciones l
 - **Motor:** Godot 4.x con el renderizador **Compatibility**, para exportar a web (HTML5).
 - **Datos:** escenas base heredables (`.tscn`) y recursos personalizados (`.tres`) que inyectan estadísticas y patrones.
 - **Equipo:** 2 personas, con **Git**. Trabajo dividido por escenas y scripts independientes para evitar conflictos de fusión.
-- **Lenguaje:** GDScript **[Propuesto]** (es la opción segura para exportar a web).
+- **Lenguaje:** GDScript. Se descartó C# porque Godot 4 con .NET no exporta a web, y el `BulletManager` por arrays ya resuelve el rendimiento. Si el perfilado lo exige, solo el bucle de balas pasaría a GDExtension.
 
 ## 3. Reparto de trabajo [Decidido]
 
@@ -220,7 +220,7 @@ Pregunta al equipo antes de asumir cualquiera de estas.
 1. Resolución y formato (confirmar la propuesta de 720×960 en ventana de 1280×960).
 2. Plataformas: ¿solo navegador, también Windows, también móvil con control táctil?
 3. Controles: ¿teclado, mando? ¿Disparo automático o manteniendo un botón?
-4. Lenguaje: confirmar GDScript.
+4. ~~Lenguaje~~: resuelto el 2026-11-16, GDScript (ver sección 2).
 
 **Sistemas del jugador**
 

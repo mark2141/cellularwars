@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="FormationData" format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/formation_data.gd" id="1_1cbof"]
+
+[resource]
+script = ExtResource("1_1cbof")
+columns = 6
+rows = 3

@@ -1,13 +1,14 @@
 class_name Player
 extends Node2D
-## Nave del jugador: movimiento, Focus, escudos, graze y disparo.
+## Nave del jugador: movimiento, Focus, escudos, estrellas y disparo.
 ##
 ## Los escudos son la vida: HealthComponent guarda escudos + 1, porque con
 ## 0 escudos la nave aún aguanta hasta el siguiente impacto.
 
 signal shields_changed(shields: int, max_shields: int)
-signal graze_changed(value: float, max_value: float)
-signal ability_used
+signal stars_changed(stars: int, needed: int)
+## Se emite al recoger la última estrella; quien escucha limpia el escenario.
+signal laser_fired
 signal defeated
 
 ## Margen para que la nave no salga a medias del campo.
@@ -17,7 +18,7 @@ const EDGE_MARGIN := 16.0
 
 var bullets: BulletManager
 var field: Rect2
-var graze: float = 0.0
+var stars: int = 0
 var focusing: bool = false
 
 var _invuln_left: float = 0.0
@@ -54,11 +55,16 @@ func add_shield() -> bool:
 	return true
 
 
-func add_graze() -> void:
-	if graze >= data.graze_max:
+func add_star() -> void:
+	if health.is_dead():
 		return
-	graze = min(graze + data.graze_gain, data.graze_max)
-	graze_changed.emit(graze, data.graze_max)
+	stars += 1
+	var fire := stars >= data.stars_for_laser
+	if fire:
+		stars = 0
+	stars_changed.emit(stars, data.stars_for_laser)
+	if fire:
+		laser_fired.emit()
 
 
 func _physics_process(delta: float) -> void:
@@ -66,11 +72,6 @@ func _physics_process(delta: float) -> void:
 	var dir := Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down")
 	_move(dir * (data.focus_speed if focusing else data.speed) * delta)
 	weapon.active = Input.is_action_pressed(&"shoot") or _touching
-
-	if Input.is_action_just_pressed(&"ability") and graze >= data.graze_max:
-		graze = 0.0
-		graze_changed.emit(graze, data.graze_max)
-		ability_used.emit()
 
 	if _invuln_left > 0.0:
 		_invuln_left -= delta
@@ -127,6 +128,5 @@ func _draw() -> void:
 		draw_arc(Vector2.ZERO, 26.0, 0.0, TAU, 40,
 				Color(0.4, 0.8, 1.0, 0.25 + 0.15 * shields()), 2.0)
 	if focusing:
-		draw_arc(Vector2.ZERO, data.graze_radius, 0.0, TAU, 40, Color(0.4, 1.0, 0.9, 0.5), 1.5)
 		draw_circle(Vector2.ZERO, data.hitbox_radius + 1.5, Color(1.0, 0.2, 0.3))
 		draw_circle(Vector2.ZERO, data.hitbox_radius, Color.WHITE)

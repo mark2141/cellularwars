@@ -8,7 +8,7 @@ extends Area2D
 signal hit_received(amount: int)
 
 @export var health: HealthComponent
-## Radio usado por las comprobaciones por distancia (balas y graze).
+## Radio usado por las comprobaciones por distancia (balas y contacto).
 @export var radius: float = 8.0
 
 

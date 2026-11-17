@@ -4,9 +4,13 @@ extends Node
 
 const ENEMY_SCENE := preload("res://scenes/enemies/enemy.tscn")
 const SHIELD_PICKUP := preload("res://scenes/pickups/shield_pickup.tscn")
+const STAR_PICKUP := preload("res://scenes/pickups/star_pickup.tscn")
 const TEST_ENEMY: EnemyData = preload("res://resources/enemies/bacteriofago_menor.tres")
 const TEST_TIER: TierData = preload("res://resources/tiers/regular.tres")
 const RESTART_DELAY := 1.5
+
+## True mientras el láser elimina enemigos: esas bajas no sueltan drops.
+var _laser_sweep: bool = false
 
 @onready var playfield: Playfield = $Playfield
 @onready var bullets: BulletManager = $Playfield/BulletManager
@@ -22,8 +26,8 @@ func _ready() -> void:
 	player.field = field
 	player.position = Vector2(field.size.x * 0.5, field.size.y - 180.0)
 	player.shields_changed.connect(func(_s: int, _m: int) -> void: _update_status())
-	player.graze_changed.connect(func(_v: float, _m: float) -> void: _update_status())
-	player.ability_used.connect(_on_ability_used)
+	player.stars_changed.connect(func(_s: int, _n: int) -> void: _update_status())
+	player.laser_fired.connect(_on_laser_fired)
 	player.defeated.connect(_on_player_defeated)
 	_update_status()
 	_spawn_test_row()
@@ -43,20 +47,43 @@ func _spawn_test_row() -> void:
 
 
 func _on_enemy_defeated(enemy: Enemy) -> void:
-	if randf() < enemy.data.shield_drop_chance:
-		var pickup: ShieldPickup = SHIELD_PICKUP.instantiate()
-		pickup.player = player
-		pickup.field = playfield.rect()
-		pickup.position = enemy.position
-		playfield.add_child.call_deferred(pickup)
+	if not _laser_sweep:
+		_roll_drop(enemy)
 	# El enemigo ya salió del grupo al morir: si no queda ninguno, nueva fila.
 	if get_tree().get_nodes_in_group(&"enemies").is_empty():
 		_spawn_test_row.call_deferred()
 
 
-## Provisional: la habilidad del graze es una bomba que limpia las balas enemigas.
-func _on_ability_used() -> void:
+## Como mucho un drop por enemigo: primero se sortea el escudo y después la estrella.
+func _roll_drop(enemy: Enemy) -> void:
+	var roll := randf()
+	var scene: PackedScene = null
+	if roll < enemy.data.shield_drop_chance:
+		scene = SHIELD_PICKUP
+	elif roll < enemy.data.shield_drop_chance + enemy.data.star_drop_chance:
+		scene = STAR_PICKUP
+	if scene == null:
+		return
+	var pickup: Pickup = scene.instantiate()
+	pickup.player = player
+	pickup.field = playfield.rect()
+	pickup.position = enemy.position
+	playfield.add_child.call_deferred(pickup)
+
+
+## El láser limpia el escenario: todas las balas enemigas y todos los enemigos.
+func _on_laser_fired() -> void:
 	bullets.clear(BulletManager.Team.ENEMY)
+	_laser_sweep = true
+	for enemy: Enemy in get_tree().get_nodes_in_group(&"enemies"):
+		enemy.health.take_damage(enemy.health.hp)
+	_laser_sweep = false
+	var beam := LaserBeam.new()
+	beam.field = playfield.rect()
+	beam.duration = player.data.laser_duration
+	beam.position = player.position
+	beam.z_index = 2
+	playfield.add_child(beam)
 
 
 func _on_player_defeated() -> void:
@@ -65,4 +92,5 @@ func _on_player_defeated() -> void:
 
 
 func _update_status() -> void:
-	status.text = "Escudos: %d/%d   Graze: %d/%d" % [player.shields(), player.data.max_shields, player.graze, player.data.graze_max]
+	status.text = "Escudos: %d/%d   Estrellas: %d/%d" % [
+		player.shields(), player.data.max_shields, player.stars, player.data.stars_for_laser]

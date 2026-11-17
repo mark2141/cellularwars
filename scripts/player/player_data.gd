@@ -2,6 +2,9 @@ class_name PlayerData
 extends Resource
 ## Valores de balance del jugador.
 
+## Distancia a la que se recoge un drop.
+@export var pickup_radius: float = 26.0
+
 @export_group("Movimiento")
 @export var speed: float = 420.0
 @export var focus_speed: float = 180.0
@@ -12,16 +15,15 @@ extends Resource
 ## Escudos al empezar el nivel. Con 0 escudos, el siguiente impacto destruye la nave.
 @export var start_shields: int = 3
 @export var max_shields: int = 5
-## Distancia a la que se recoge un drop.
-@export var pickup_radius: float = 26.0
 ## Segundos de invulnerabilidad tras perder un escudo.
 @export var invuln_time: float = 2.0
 @export var hitbox_radius: float = 4.0
 
-@export_group("Graze")
-@export var graze_radius: float = 28.0
-@export var graze_gain: float = 4.0
-@export var graze_max: float = 100.0
+@export_group("Láser")
+## Estrellas que hay que recoger para lanzar el láser.
+@export var stars_for_laser: int = 3
+## Segundos que dura el rayo en pantalla (la limpieza es instantánea).
+@export var laser_duration: float = 0.7
 
 @export_group("Disparo")
 @export var fire_interval: float = 0.1

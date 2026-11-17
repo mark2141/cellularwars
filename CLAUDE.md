@@ -12,7 +12,7 @@ Actúa como arquitecto técnico y asistente de desarrollo. Prioriza soluciones l
 
 - **Género:** híbrido entre *Space Invaders* (oleadas descendentes en formación, barreras destructibles, ritmo táctico) y *bullet hell* accesible (patrones geométricos que siempre dejan pasillos visibles; sin saturación extrema).
 - **Modo Precisión (*Focus*):** reduce la velocidad de la nave y muestra su *hitbox* central exacta.
-- **Sistema de *Graze*:** pasar cerca de proyectiles sin recibir daño carga una barra de habilidad especial (bomba limpia-pantalla o láser cargado; falta elegir).
+- **Estrellas y láser:** los enemigos pueden soltar estrellas; al recoger 3, la nave lanza un láser gigante que limpia el escenario de enemigos y de balas. Sustituye desde el 2026-11-17 al sistema de *graze*, que queda descartado.
 - **Temática:** invasión microscópica. El jugador controla un nanobot médico (o leucocito modificado) que recorre el torrente sanguíneo y los órganos de un organismo infectado.
 - **Estética:** tonos biológicos profundos (rojos venosos, púrpuras, azules oscuros) con proyectiles bioluminiscentes (esporas, espinas celulares, descargas nerviosas).
 - **Plataforma de lanzamiento:** itch.io, con una única versión web jugable en navegador de PC y de Android, con controles táctiles. Un APK instalable queda como posible añadido posterior, no como objetivo inicial.
@@ -145,7 +145,6 @@ class_name TierData extends Resource
 ### Balas
 
 - Un `BulletManager` central mueve y dibuja los proyectiles desde arrays. No se usa una escena `Area2D` por bala: habrá cientos a la vez y el objetivo es web.
-- El *graze* es una segunda comprobación de distancia con un radio mayor que el de la *hitbox*.
 - Los patrones son recursos `BulletPattern` (abanico, anillo, espiral, muro con huecos) reutilizables por enemigos y jefes.
 
 ### Jefes
@@ -183,7 +182,7 @@ Que haya controles táctiles está decidido; el esquema concreto es una propuest
 
 - Movimiento por arrastre relativo (la nave sigue el desplazamiento del dedo, no salta a su posición).
 - Disparo automático en táctil.
-- Botones en pantalla para *Focus* y para la habilidad del *graze*.
+- Botón en pantalla para *Focus*. El láser no necesita botón: se lanza solo al recoger la tercera estrella.
 - Pantalla de «toca para empezar» (el navegador no reproduce audio hasta el primer toque) y botón de pantalla completa.
 
 ### Escudos [Decidido, 2026-11-17]
@@ -191,14 +190,21 @@ Que haya controles táctiles está decidido; el esquema concreto es una propuest
 - Los escudos son la vida del jugador. El nivel 1 empieza con 3 y se acumulan hasta 5.
 - Cada impacto quita un escudo. Con 0 escudos la nave sigue viva; el siguiente impacto la destruye y el nivel se reinicia.
 - Al morir, un enemigo tiene una probabilidad de soltar un escudo, que el jugador recoge chocando con él.
+- Chocar con el cuerpo de un enemigo también quita un escudo; el enemigo sigue vivo.
 - Implementación: `HealthComponent` guarda escudos + 1.
+
+### Estrellas y láser [Decidido, 2026-11-17]
+
+- Al morir, un enemigo puede soltar una estrella. Se recoge chocando con ella, igual que el escudo.
+- Al recoger la tercera, la nave lanza automáticamente un láser gigante que elimina a todos los enemigos y borra todas las balas enemigas. El contador vuelve a 0.
+- Elegido por Claude, sin confirmar: un enemigo suelta como mucho un drop (escudo o estrella); los enemigos eliminados por el láser no sueltan nada; las estrellas no tienen tope porque se gastan al llegar a 3. Falta definir qué hace el láser contra un jefe.
 
 ### Estado del esqueleto (2026-11-16)
 
 Ya existe en el repositorio. Usa valores **provisionales** que el equipo aún no ha confirmado; cambiarlos es barato:
 
 - Resolución base 720×1280 en `project.godot`. `scripts/core/playfield.gd` centra el campo y deja el espacio sobrante para el HUD (a los lados en escritorio, arriba y abajo en móvil).
-- Acciones de entrada: `move_*` (flechas y WASD), `focus` (Shift), `shoot` (Z, manteniendo; decidido), `ability` (X), `pause` (Esc). Sin mando por ahora.
+- Acciones de entrada: `move_*` (flechas y WASD), `focus` (Shift), `shoot` (Espacio, manteniendo; decidido), `pause` (Esc). Sin mando por ahora.
 - Capas de física 2D: 1 jugador, 2 enemigos, 3 disparos_jugador, 4 barreras, 5 powerups (constantes en `scripts/core/layers.gd`).
 - Carpetas: `scenes/`, `scripts/components/`, `scripts/core/`, `resources/`, `assets/`, `shaders/`, `tools/` (Python; Godot la ignora).
 
@@ -206,20 +212,19 @@ Ya existe en el repositorio. Usa valores **provisionales** que el equipo aún no
 
 `scenes/main/main.tscn` es una escena de pruebas, no un nivel: una fila de 5 Bacteriófagos Menores que reaparece al eliminarla.
 
-- **Jugador** (`scripts/player/`, balance en `resources/player/player_default.tres`): movimiento, *Focus* (muestra *hitbox* y radio de *graze*), escudos con invulnerabilidad y parpadeo tras cada impacto, *graze* que carga una barra, y arrastre táctil relativo.
-- **Drop de escudo** (`scripts/pickups/shield_pickup.gd`): cae desde el enemigo muerto y se recoge por distancia. La probabilidad está en `EnemyData.shield_drop_chance`, por arquetipo.
+- **Jugador** (`scripts/player/`, balance en `resources/player/player_default.tres`): movimiento, *Focus* (muestra la *hitbox*), escudos con invulnerabilidad y parpadeo tras cada impacto, contador de estrellas y arrastre táctil relativo.
+- **Drops** (`scripts/pickups/pickup.gd`, con tipo escudo o estrella): caen desde el enemigo muerto y se recogen por distancia. Las probabilidades están en `EnemyData` (`shield_drop_chance` y `star_drop_chance`), por arquetipo.
+- **Láser** (`scripts/player/laser_beam.gd`): solo es el efecto visual; la limpieza la hace `main.gd`.
 - **`BulletManager`** (`scripts/bullets/`): arrays empaquetados, colisión por distancia y dibujo con círculos aditivos. Jugador, enemigos y el gestor deben ser hijos directos de `Playfield`.
 - **`BulletPattern`**: por ahora solo abanico (también disparo único apuntado) y anillo. Faltan espiral y muro con huecos.
 - **Enemigo** (`scripts/enemies/`): `Enemy.tscn` + `EnemyData` + `TierData` como en la propuesta. Solo existen el Bacteriófago Menor y el rango Regular.
 
 Provisional, a sustituir:
 
-- La habilidad del *graze* es una bomba que limpia las balas enemigas (decisión n.º 6 abierta).
 - La oscilación del enemigo vive en `EnemyData`; pasará a `MovementPattern`.
 - `TierData.tint` es un color plano; pasará a `Gradient` con el shader de paleta.
 - Todo se dibuja con formas por código y el HUD es una etiqueta de texto.
-- En táctil no hay todavía botones de *Focus* ni de habilidad (llegan con el HUD).
-- Chocar con el cuerpo de un enemigo no hace daño.
+- En táctil no hay todavía botón de *Focus* (llega con el HUD).
 - Todos los valores de balance son iniciales y sin probar por el equipo.
 
 ## 8. Especificación de assets generados [Propuesto]
@@ -253,7 +258,7 @@ Total: 25–35 semanas. Es una estimación para un equipo pequeño a tiempo parc
 ## 10. Orden de trabajo [Propuesto]
 
 1. Esqueleto del proyecto: carpetas, `.gitignore` para Godot, resolución, capas de colisión y componentes compartidos.
-2. Jugador (con *Focus* y *graze*), `BulletManager` y un enemigo con `EnemyData` + `TierData`, con formas provisionales.
+2. Jugador (con *Focus*, escudos y estrellas), `BulletManager` y un enemigo con `EnemyData` + `TierData`, con formas provisionales.
 3. Script de procesamiento de assets, cuando exista la primera imagen generada.
 4. Shader de paleta e impacto, partículas de explosión y propulsor.
 5. HUD en SVG.
@@ -267,13 +272,13 @@ Pregunta al equipo antes de asumir cualquiera de estas.
 
 1. Resolución y formato: confirmar la proporción del campo de juego (propuesta: 720×1280 con disposición adaptable, ver sección 7).
 2. ~~Plataformas~~: resuelto el 2026-11-16, versión web única para PC y Android con controles táctiles (ver sección 1).
-3. Controles: decidido teclado con disparo manteniendo Z (2026-11-16) y táctil con disparo automático mientras se toca. Falta confirmar el resto del esquema táctil (sección 7) y si habrá mando.
+3. Controles: decidido teclado con disparo manteniendo Espacio (2026-11-17; antes Z) y táctil con disparo automático mientras se toca. Falta confirmar el resto del esquema táctil (sección 7) y si habrá mando.
 4. ~~Lenguaje~~: resuelto el 2026-11-16, GDScript (ver sección 2).
 
 **Sistemas del jugador**
 
 5. ~~Vida y fallo~~: resuelto el 2026-11-17, sistema de escudos (ver «Escudos» en la sección 7). Sustituye a las vidas decididas el día anterior. Falta: segundos de invulnerabilidad tras un impacto (provisional: 2), probabilidad de drop (provisional: 15 %) y si los niveles 2 a 7 empiezan también con 3 escudos o conservan los del nivel anterior.
-6. Habilidad del *graze*: ¿bomba, láser o a elección?
+6. ~~Habilidad del *graze*~~: resuelto el 2026-11-17, el *graze* se sustituye por estrellas que disparan un láser (ver sección 7). Falta: probabilidad de drop de estrella (provisional: 10 %) y efecto del láser sobre los jefes.
 7. *Power-ups*: tipos y si se conservan entre niveles.
 8. Progresión: ¿mejoras permanentes o tienda entre niveles?
 9. Puntuación: ¿multiplicador y tabla de récords?

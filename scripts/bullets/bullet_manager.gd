@@ -18,7 +18,6 @@ var _rad := PackedFloat32Array()
 var _col := PackedColorArray()
 var _team := PackedByteArray()
 var _dmg := PackedInt32Array()
-var _grazed := PackedByteArray()
 
 
 func _ready() -> void:
@@ -35,14 +34,13 @@ func spawn(pos: Vector2, vel: Vector2, radius: float, color: Color, team: Team, 
 	_col.append(color)
 	_team.append(team)
 	_dmg.append(damage)
-	_grazed.append(0)
 
 
 func count() -> int:
 	return _pos.size()
 
 
-## Borra todas las balas de un bando (lo usa la bomba).
+## Borra todas las balas de un bando (lo usa el láser).
 func clear(team: Team) -> void:
 	for i in range(_pos.size() - 1, -1, -1):
 		if _team[i] == team:
@@ -70,18 +68,12 @@ func _physics_process(delta: float) -> void:
 	queue_redraw()
 
 
-## Devuelve true si la bala impactó. Si solo pasó cerca, cuenta el graze una vez.
+## Devuelve true si la bala impactó al jugador.
 func _check_player(i: int, p: Vector2) -> bool:
-	var d2 := p.distance_squared_to(player.position)
 	var hit_r := player.hitbox.radius + _rad[i]
-	if d2 <= hit_r * hit_r:
+	if p.distance_squared_to(player.position) <= hit_r * hit_r:
 		player.hitbox.hit(_dmg[i])
 		return true
-	if _grazed[i] == 0:
-		var graze_r := player.data.graze_radius + _rad[i]
-		if d2 <= graze_r * graze_r:
-			_grazed[i] = 1
-			player.add_graze()
 	return false
 
 
@@ -105,14 +97,12 @@ func _remove(i: int) -> void:
 		_col[i] = _col[last]
 		_team[i] = _team[last]
 		_dmg[i] = _dmg[last]
-		_grazed[i] = _grazed[last]
 	_pos.resize(last)
 	_vel.resize(last)
 	_rad.resize(last)
 	_col.resize(last)
 	_team.resize(last)
 	_dmg.resize(last)
-	_grazed.resize(last)
 
 
 func _draw() -> void:

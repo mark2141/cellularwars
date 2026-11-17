@@ -19,6 +19,8 @@ extends Resource
 @export_range(0.0, 1.0) var shield_drop_chance: float = 0.15
 ## Probabilidad (0 a 1) de soltar una estrella al morir. Un enemigo suelta como mucho un drop.
 @export_range(0.0, 1.0) var star_drop_chance: float = 0.1
+## Probabilidad (0 a 1) de soltar una mejora de arma. Qué armas pueden salir lo decide el nivel.
+@export_range(0.0, 1.0) var weapon_drop_chance: float = 0.05
 
 @export_group("Patrones por rango")
 @export var pattern_regular: BulletPattern

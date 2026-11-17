@@ -9,6 +9,8 @@
 [ext_resource type="Resource" path="res://resources/formations/rejilla_6x2.tres" id="7_bbtr6"]
 [ext_resource type="Resource" path="res://resources/enemies/leucocito_zombi.tres" id="8_2dyce"]
 [ext_resource type="Script" path="res://scripts/levels/level_data.gd" id="9_h2q1g"]
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="10_v6d2w"]
+[ext_resource type="Resource" path="res://resources/weapons/doble.tres" id="11_br0t4"]
 
 [sub_resource type="Resource" id="Resource_usjkt"]
 script = ExtResource("1_4u7ew")
@@ -305,3 +307,4 @@ step = Vector2(85, 0)
 script = ExtResource("9_h2q1g")
 display_name = "Nivel 1: Infiltración inicial"
 events = Array[ExtResource("1_4u7ew")]([SubResource("Resource_usjkt"), SubResource("Resource_hvnto"), SubResource("Resource_54p52"), SubResource("Resource_cbuls"), SubResource("Resource_4rs42"), SubResource("Resource_j8bn2"), SubResource("Resource_jwp53"), SubResource("Resource_3mcnt"), SubResource("Resource_xd5nw"), SubResource("Resource_jh3hq"), SubResource("Resource_s8wyg"), SubResource("Resource_4iwpj"), SubResource("Resource_67t5i"), SubResource("Resource_1da5u"), SubResource("Resource_qivv5"), SubResource("Resource_jgvqx"), SubResource("Resource_oimsq"), SubResource("Resource_cjkua"), SubResource("Resource_k3vih"), SubResource("Resource_1etfx"), SubResource("Resource_83kgu"), SubResource("Resource_cr1ow"), SubResource("Resource_02t1x"), SubResource("Resource_uvy7q"), SubResource("Resource_6xjc0"), SubResource("Resource_eq047"), SubResource("Resource_ue3mf"), SubResource("Resource_aqx77"), SubResource("Resource_bpay7"), SubResource("Resource_7y0t6"), SubResource("Resource_wale4"), SubResource("Resource_n5uy0")])
+weapon_drops = Array[ExtResource("10_v6d2w")]([ExtResource("11_br0t4")])

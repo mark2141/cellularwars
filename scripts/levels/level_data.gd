@@ -4,3 +4,5 @@ extends Resource
 
 @export var display_name: String = ""
 @export var events: Array[WaveEvent] = []
+## Mejoras de arma que pueden caer en este nivel.
+@export var weapon_drops: Array[WeaponData] = []

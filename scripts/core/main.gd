@@ -3,6 +3,7 @@ extends Node
 
 const SHIELD_PICKUP := preload("res://scenes/pickups/shield_pickup.tscn")
 const STAR_PICKUP := preload("res://scenes/pickups/star_pickup.tscn")
+const WEAPON_PICKUP := preload("res://scenes/pickups/weapon_pickup.tscn")
 const RESTART_DELAY := 1.5
 
 ## True mientras el láser elimina enemigos: esas bajas no sueltan drops.
@@ -35,9 +36,9 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	var seconds := int(runner.time)
-	status.text = "Escudos: %d/%d   Estrellas: %d/%d   %d:%02d" % [
+	status.text = "Escudos: %d/%d   Estrellas: %d/%d   Arma: %s   %d:%02d" % [
 		player.shields(), player.data.max_shields, player.stars, player.data.stars_for_laser,
-		seconds / 60, seconds % 60]
+		player.current_weapon.display_name, seconds / 60, seconds % 60]
 
 
 func _on_enemy_defeated(enemy: Enemy) -> void:
@@ -45,21 +46,33 @@ func _on_enemy_defeated(enemy: Enemy) -> void:
 		_roll_drop(enemy)
 
 
-## Como mucho un drop por enemigo: primero se sortea el escudo y después la estrella.
+## Como mucho un drop por enemigo: se sortean en orden escudo, estrella y arma.
 func _roll_drop(enemy: Enemy) -> void:
+	var d := enemy.data
 	var roll := randf()
-	var scene: PackedScene = null
-	if roll < enemy.data.shield_drop_chance:
-		scene = SHIELD_PICKUP
-	elif roll < enemy.data.shield_drop_chance + enemy.data.star_drop_chance:
-		scene = STAR_PICKUP
-	if scene == null:
+	if roll < d.shield_drop_chance:
+		_drop(SHIELD_PICKUP, enemy.position)
 		return
+	roll -= d.shield_drop_chance
+	if roll < d.star_drop_chance:
+		_drop(STAR_PICKUP, enemy.position)
+		return
+	roll -= d.star_drop_chance
+	if roll < d.weapon_drop_chance:
+		# Solo armas distintas de la actual, para que el drop siempre ofrezca un cambio.
+		var options := runner.level.weapon_drops.filter(
+				func(w: WeaponData) -> bool: return w != player.current_weapon)
+		if not options.is_empty():
+			_drop(WEAPON_PICKUP, enemy.position).weapon = options.pick_random()
+
+
+func _drop(scene: PackedScene, at: Vector2) -> Pickup:
 	var pickup: Pickup = scene.instantiate()
 	pickup.player = player
 	pickup.field = playfield.rect()
-	pickup.position = enemy.position
+	pickup.position = at
 	playfield.add_child.call_deferred(pickup)
+	return pickup
 
 
 ## El láser limpia el escenario: todas las balas enemigas y todos los enemigos.

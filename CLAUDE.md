@@ -107,11 +107,13 @@ Curva introductoria de unos 8 minutos. Enemigos: Bacteriófago Menor, Espora Cí
 
 En el nivel 1 los disparos enemigos van en línea recta: ninguno apunta al jugador ni lo sigue (decidido el 2026-11-17).
 
+**Ritmo (decidido el 2026-11-17):** si el jugador limpia el campo, la siguiente oleada entra enseguida en lugar de esperar a su marca de tiempo. Los tiempos de la tabla son, por tanto, el máximo; un jugador que elimina todo termina antes.
+
 **Foco actual del equipo:** solo el nivel 1. No trabajar en los niveles 2 a 7 hasta que lo pidan.
 
 | Tiempo | Contenido |
 |---|---|
-| 0:00 – 1:30 | Calentamiento sin disparos enemigos, para aprender el movimiento y la *hitbox* |
+| 0:00 – 1:30 | Calentamiento solo con Bacteriófagos. Desde el 2026-11-17 disparan desde la primera oleada (antes: sin disparos) |
 | 1:30 – 3:00 | Entran las Esporas Cíclicas y los primeros proyectiles lentos y espaciados |
 | 3:00 – 5:00 | Leucocitos Zombis por los flancos, zigzag clásico y primeros *power-ups* |
 | 5:00 – 6:30 | Oleada de desgaste en cascada diagonal |
@@ -223,7 +225,7 @@ Ya existe en el repositorio. - Resolución base 720×1280 (decidida) en `project
   - Leucocito Zombi: resistente, baja en zigzag por los flancos, bala más grande.
 - **`MovementPattern`** (`resources/movements/`): recto, oscilación, círculo y zigzag, como desplazamiento sobre la trayectoria base.
 - **Formaciones** (`scripts/levels/formation.gd` + `FormationData`): rejilla tipo Space Invaders que entra desde arriba, barre de lado a lado bajando un escalón en cada borde y se retira a los 24 s.
-- **Oleadas** (`scripts/levels/`): `LevelData` contiene una lista de `WaveEvent` (segundo, arquetipo, rango, formación o fila, punto de entrada, dirección, si dispara). `LevelRunner` las lanza por tiempo. Se editan desde el inspector abriendo `level_1.tres`.
+- **Oleadas** (`scripts/levels/`): `LevelData` contiene una lista de `WaveEvent` (segundo, arquetipo, rango, formación o fila, punto de entrada, dirección, si dispara). `LevelRunner` las lanza por tiempo y, con `advance_when_clear`, adelanta el reloj a la siguiente oleada cuando no quedan enemigos. Se editan desde el inspector abriendo `level_1.tres`.
 - **Para probar un tramo:** el nodo `LevelRunner` de `main.tscn` tiene `debug_start_time` (segundos) para empezar el nivel más adelante. Dejarlo en 0 al hacer commit.
 
 Provisional, a sustituir:

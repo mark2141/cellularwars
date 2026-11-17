@@ -9,6 +9,10 @@ signal waves_finished
 const ENEMY_SCENE := preload("res://scenes/enemies/enemy.tscn")
 
 @export var level: LevelData
+## Si el campo queda vacío, salta la espera hasta la siguiente oleada.
+@export var advance_when_clear: bool = true
+## Segundos de respiro entre limpiar el campo y la siguiente oleada.
+@export var clear_delay: float = 1.2
 ## Solo para pruebas: empieza el nivel en este segundo, saltándose lo anterior.
 @export var debug_start_time: float = 0.0
 
@@ -48,8 +52,11 @@ func _physics_process(delta: float) -> void:
 		if stream[1] >= event.count:
 			_streams.remove_at(i)
 
-	if not _finished and _next >= _events.size() and _streams.is_empty() \
-			and get_tree().get_nodes_in_group(&"enemies").is_empty():
+	var field_clear := _streams.is_empty() and get_tree().get_nodes_in_group(&"enemies").is_empty()
+	if advance_when_clear and field_clear and _next < _events.size():
+		time = max(time, _events[_next].time - clear_delay)
+
+	if not _finished and _next >= _events.size() and field_clear:
 		_finished = true
 		waves_finished.emit()
 

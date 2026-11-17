@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_yxgjx"]
+
+[resource]
+script = ExtResource("1_yxgjx")
+display_name = "Doble"
+letter = "D"
+color = Color(0.45, 1, 0.6, 1)
+shot_count = 2

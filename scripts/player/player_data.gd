@@ -25,11 +25,6 @@ extends Resource
 ## Segundos que dura el rayo en pantalla (la limpieza es instantánea).
 @export var laser_duration: float = 0.7
 
-@export_group("Disparo")
-@export var fire_interval: float = 0.1
-@export var shot_speed: float = 900.0
-@export var shot_radius: float = 5.0
-@export var shot_damage: int = 1
-## Separación horizontal de los dos cañones respecto al centro.
-@export var shot_offset: float = 10.0
-@export var shot_color: Color = Color(0.5, 0.85, 1.0)
+@export_group("Arma")
+## Arma con la que empieza el nivel. Las mejoras la sustituyen.
+@export var default_weapon: WeaponData

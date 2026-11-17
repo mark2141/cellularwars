@@ -8,6 +8,8 @@ extends Node2D
 enum Team { ENEMY, PLAYER }
 
 const CULL_MARGIN := 32.0
+## Largo de la estela de los disparos del jugador, que se dibujan como líneas.
+const SHOT_LENGTH := 26.0
 
 var player: Player
 var field: Rect2
@@ -109,6 +111,12 @@ func _draw() -> void:
 	# Dibujo provisional con círculos; se sustituirá por los proyectiles en SVG.
 	for i in _pos.size():
 		var c := _col[i]
+		if _team[i] == Team.PLAYER:
+			var tail := _pos[i] - _vel[i].normalized() * SHOT_LENGTH
+			draw_line(_pos[i], tail, Color(c, 0.35), _rad[i] * 2.2)
+			draw_line(_pos[i], tail, c, _rad[i])
+			draw_line(_pos[i], tail, Color.WHITE, _rad[i] * 0.35)
+			continue
 		draw_circle(_pos[i], _rad[i] * 1.8, Color(c, 0.3))
 		draw_circle(_pos[i], _rad[i], c)
 		draw_circle(_pos[i], _rad[i] * 0.45, Color.WHITE)

@@ -9,6 +9,7 @@ signal shields_changed(shields: int, max_shields: int)
 signal stars_changed(stars: int, needed: int)
 ## Se emite al recoger la última estrella; quien escucha limpia el escenario.
 signal laser_fired
+signal weapon_changed(weapon: WeaponData)
 signal defeated
 
 ## Margen para que la nave no salga a medias del campo.
@@ -19,6 +20,7 @@ const EDGE_MARGIN := 16.0
 var bullets: BulletManager
 var field: Rect2
 var stars: int = 0
+var current_weapon: WeaponData
 var focusing: bool = false
 
 var _invuln_left: float = 0.0
@@ -32,14 +34,21 @@ var _touching: bool = false
 func _ready() -> void:
 	health.reset(data.max_shields + 1, data.start_shields + 1)
 	hitbox.radius = data.hitbox_radius
-	weapon.interval = data.fire_interval
 	health.damaged.connect(_on_damaged)
 	health.died.connect(_on_died)
 	weapon.fired.connect(_on_fired)
+	set_weapon(data.default_weapon)
 
 
 func is_targetable() -> bool:
 	return not health.is_dead() and not health.invulnerable
+
+
+## Sustituye el arma actual (la mejora no se acumula).
+func set_weapon(new_weapon: WeaponData) -> void:
+	current_weapon = new_weapon
+	weapon.interval = new_weapon.fire_interval
+	weapon_changed.emit(new_weapon)
 
 
 func shields() -> int:
@@ -112,10 +121,7 @@ func _on_died() -> void:
 func _on_fired(_origin: Vector2) -> void:
 	if bullets == null:
 		return
-	for side: float in [-1.0, 1.0]:
-		bullets.spawn(position + Vector2(side * data.shot_offset, -18.0),
-				Vector2(0.0, -data.shot_speed), data.shot_radius, data.shot_color,
-				BulletManager.Team.PLAYER, data.shot_damage)
+	current_weapon.fire(bullets, position + Vector2(0.0, -20.0))
 
 
 func _draw() -> void:

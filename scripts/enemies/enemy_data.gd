@@ -10,6 +10,9 @@ extends Resource
 ## Provisional hasta tener sprites.
 @export var color: Color = Color(0.8, 0.3, 0.5)
 
+## Probabilidad (0 a 1) de soltar un escudo al morir.
+@export_range(0.0, 1.0) var shield_drop_chance: float = 0.15
+
 @export_group("Oscilación (provisional, pasará a MovementPattern)")
 @export var sway_amplitude: float = 0.0
 @export var sway_frequency: float = 0.0

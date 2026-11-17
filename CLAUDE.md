@@ -186,6 +186,13 @@ Que haya controles táctiles está decidido; el esquema concreto es una propuest
 - Botones en pantalla para *Focus* y para la habilidad del *graze*.
 - Pantalla de «toca para empezar» (el navegador no reproduce audio hasta el primer toque) y botón de pantalla completa.
 
+### Escudos [Decidido, 2026-11-17]
+
+- Los escudos son la vida del jugador. El nivel 1 empieza con 3 y se acumulan hasta 5.
+- Cada impacto quita un escudo. Con 0 escudos la nave sigue viva; el siguiente impacto la destruye y el nivel se reinicia.
+- Al morir, un enemigo tiene una probabilidad de soltar un escudo, que el jugador recoge chocando con él.
+- Implementación: `HealthComponent` guarda escudos + 1.
+
 ### Estado del esqueleto (2026-11-16)
 
 Ya existe en el repositorio. Usa valores **provisionales** que el equipo aún no ha confirmado; cambiarlos es barato:
@@ -199,7 +206,8 @@ Ya existe en el repositorio. Usa valores **provisionales** que el equipo aún no
 
 `scenes/main/main.tscn` es una escena de pruebas, no un nivel: una fila de 5 Bacteriófagos Menores que reaparece al eliminarla.
 
-- **Jugador** (`scripts/player/`, balance en `resources/player/player_default.tres`): movimiento, *Focus* (muestra *hitbox* y radio de *graze*), vidas con invulnerabilidad y parpadeo, *graze* que carga una barra, y arrastre táctil relativo. Al quedarse sin vidas la escena se reinicia.
+- **Jugador** (`scripts/player/`, balance en `resources/player/player_default.tres`): movimiento, *Focus* (muestra *hitbox* y radio de *graze*), escudos con invulnerabilidad y parpadeo tras cada impacto, *graze* que carga una barra, y arrastre táctil relativo.
+- **Drop de escudo** (`scripts/pickups/shield_pickup.gd`): cae desde el enemigo muerto y se recoge por distancia. La probabilidad está en `EnemyData.shield_drop_chance`, por arquetipo.
 - **`BulletManager`** (`scripts/bullets/`): arrays empaquetados, colisión por distancia y dibujo con círculos aditivos. Jugador, enemigos y el gestor deben ser hijos directos de `Playfield`.
 - **`BulletPattern`**: por ahora solo abanico (también disparo único apuntado) y anillo. Faltan espiral y muro con huecos.
 - **Enemigo** (`scripts/enemies/`): `Enemy.tscn` + `EnemyData` + `TierData` como en la propuesta. Solo existen el Bacteriófago Menor y el rango Regular.
@@ -264,7 +272,7 @@ Pregunta al equipo antes de asumir cualquiera de estas.
 
 **Sistemas del jugador**
 
-5. Vida y fallo: decidido sistema de vidas (2026-11-16). Falta: cuántas (provisional: 3), segundos de invulnerabilidad (provisional: 2) y si hay continuaciones.
+5. ~~Vida y fallo~~: resuelto el 2026-11-17, sistema de escudos (ver «Escudos» en la sección 7). Sustituye a las vidas decididas el día anterior. Falta: segundos de invulnerabilidad tras un impacto (provisional: 2), probabilidad de drop (provisional: 15 %) y si los niveles 2 a 7 empiezan también con 3 escudos o conservan los del nivel anterior.
 6. Habilidad del *graze*: ¿bomba, láser o a elección?
 7. *Power-ups*: tipos y si se conservan entre niveles.
 8. Progresión: ¿mejoras permanentes o tienda entre niveles?

@@ -3,6 +3,7 @@ extends Node
 ## Se sustituirá por Level.tscn con oleadas definidas en recursos.
 
 const ENEMY_SCENE := preload("res://scenes/enemies/enemy.tscn")
+const SHIELD_PICKUP := preload("res://scenes/pickups/shield_pickup.tscn")
 const TEST_ENEMY: EnemyData = preload("res://resources/enemies/bacteriofago_menor.tres")
 const TEST_TIER: TierData = preload("res://resources/tiers/regular.tres")
 const RESTART_DELAY := 1.5
@@ -20,7 +21,7 @@ func _ready() -> void:
 	player.bullets = bullets
 	player.field = field
 	player.position = Vector2(field.size.x * 0.5, field.size.y - 180.0)
-	player.lives_changed.connect(func(_l: int) -> void: _update_status())
+	player.shields_changed.connect(func(_s: int, _m: int) -> void: _update_status())
 	player.graze_changed.connect(func(_v: float, _m: float) -> void: _update_status())
 	player.ability_used.connect(_on_ability_used)
 	player.defeated.connect(_on_player_defeated)
@@ -41,7 +42,13 @@ func _spawn_test_row() -> void:
 		playfield.add_child(enemy)
 
 
-func _on_enemy_defeated(_enemy: Enemy) -> void:
+func _on_enemy_defeated(enemy: Enemy) -> void:
+	if randf() < enemy.data.shield_drop_chance:
+		var pickup: ShieldPickup = SHIELD_PICKUP.instantiate()
+		pickup.player = player
+		pickup.field = playfield.rect()
+		pickup.position = enemy.position
+		playfield.add_child.call_deferred(pickup)
 	# El enemigo ya salió del grupo al morir: si no queda ninguno, nueva fila.
 	if get_tree().get_nodes_in_group(&"enemies").is_empty():
 		_spawn_test_row.call_deferred()
@@ -58,4 +65,4 @@ func _on_player_defeated() -> void:
 
 
 func _update_status() -> void:
-	status.text = "Vidas: %d   Graze: %d/%d" % [player.health.hp, player.graze, player.data.graze_max]
+	status.text = "Escudos: %d/%d   Graze: %d/%d" % [player.shields(), player.data.max_shields, player.graze, player.data.graze_max]

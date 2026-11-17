@@ -17,9 +17,10 @@ func _ready() -> void:
 
 
 ## Reinicia la vida con un máximo nuevo (lo usa `setup()` al inyectar datos de un recurso).
-func reset(new_max_hp: int) -> void:
+## `start_hp` permite empezar por debajo del máximo (0 o menos = empezar lleno).
+func reset(new_max_hp: int, start_hp: int = 0) -> void:
 	max_hp = max(new_max_hp, 1)
-	hp = max_hp
+	hp = max_hp if start_hp <= 0 else min(start_hp, max_hp)
 
 
 func is_dead() -> bool:

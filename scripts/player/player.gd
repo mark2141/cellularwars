@@ -1,8 +1,11 @@
 class_name Player
 extends Node2D
-## Nave del jugador: movimiento, Focus, vidas, graze y disparo.
+## Nave del jugador: movimiento, Focus, escudos, graze y disparo.
+##
+## Los escudos son la vida: HealthComponent guarda escudos + 1, porque con
+## 0 escudos la nave aún aguanta hasta el siguiente impacto.
 
-signal lives_changed(lives: int)
+signal shields_changed(shields: int, max_shields: int)
 signal graze_changed(value: float, max_value: float)
 signal ability_used
 signal defeated
@@ -26,7 +29,7 @@ var _touching: bool = false
 
 
 func _ready() -> void:
-	health.reset(data.lives)
+	health.reset(data.max_shields + 1, data.start_shields + 1)
 	hitbox.radius = data.hitbox_radius
 	weapon.interval = data.fire_interval
 	health.damaged.connect(_on_damaged)
@@ -36,6 +39,19 @@ func _ready() -> void:
 
 func is_targetable() -> bool:
 	return not health.is_dead() and not health.invulnerable
+
+
+func shields() -> int:
+	return max(health.hp - 1, 0)
+
+
+## Devuelve false si ya estaba al máximo (el drop se recoge igual).
+func add_shield() -> bool:
+	if health.is_dead() or health.hp >= health.max_hp:
+		return false
+	health.heal(1)
+	shields_changed.emit(shields(), data.max_shields)
+	return true
 
 
 func add_graze() -> void:
@@ -79,7 +95,7 @@ func _move(offset: Vector2) -> void:
 
 
 func _on_damaged(_amount: int, current: int) -> void:
-	lives_changed.emit(current)
+	shields_changed.emit(shields(), data.max_shields)
 	if current > 0:
 		health.invulnerable = true
 		_invuln_left = data.invuln_time
@@ -106,6 +122,10 @@ func _draw() -> void:
 	draw_colored_polygon(
 		PackedVector2Array([Vector2(0, -22), Vector2(16, 16), Vector2(0, 8), Vector2(-16, 16)]),
 		Color(0.75, 0.9, 1.0))
+	# Anillo provisional: más opaco cuantos más escudos quedan.
+	if shields() > 0:
+		draw_arc(Vector2.ZERO, 26.0, 0.0, TAU, 40,
+				Color(0.4, 0.8, 1.0, 0.25 + 0.15 * shields()), 2.0)
 	if focusing:
 		draw_arc(Vector2.ZERO, data.graze_radius, 0.0, TAU, 40, Color(0.4, 1.0, 0.9, 0.5), 1.5)
 		draw_circle(Vector2.ZERO, data.hitbox_radius + 1.5, Color(1.0, 0.2, 0.3))

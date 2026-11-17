@@ -8,9 +8,13 @@ extends Resource
 ## Multiplicador del arrastre táctil (1 = la nave se mueve lo mismo que el dedo).
 @export var touch_sensitivity: float = 1.0
 
-@export_group("Vida")
-@export var lives: int = 3
-## Segundos de invulnerabilidad tras perder una vida.
+@export_group("Escudos")
+## Escudos al empezar el nivel. Con 0 escudos, el siguiente impacto destruye la nave.
+@export var start_shields: int = 3
+@export var max_shields: int = 5
+## Distancia a la que se recoge un drop.
+@export var pickup_radius: float = 26.0
+## Segundos de invulnerabilidad tras perder un escudo.
 @export var invuln_time: float = 2.0
 @export var hitbox_radius: float = 4.0
 

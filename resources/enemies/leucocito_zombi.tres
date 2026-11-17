@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Resource" path="res://resources/movements/zigzag.tres" id="1_skftx"]
+[ext_resource type="Resource" path="res://resources/patterns/leucocito_regular.tres" id="2_tes70"]
+[ext_resource type="Script" path="res://scripts/enemies/enemy_data.gd" id="3_0d3mx"]
+
+[resource]
+script = ExtResource("3_0d3mx")
+display_name = "Leucocito Zombi"
+max_hp = 10
+speed = 75.0
+radius = 26.0
+color = Color(0.85, 0.86, 0.72, 1)
+movement = ExtResource("1_skftx")
+pattern_regular = ExtResource("2_tes70")

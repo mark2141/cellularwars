@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Resource" path="res://resources/movements/circulo.tres" id="1_bv52f"]
+[ext_resource type="Resource" path="res://resources/patterns/espora_regular.tres" id="2_vbrjp"]
+[ext_resource type="Script" path="res://scripts/enemies/enemy_data.gd" id="3_fqhyu"]
+
+[resource]
+script = ExtResource("3_fqhyu")
+display_name = "Espora Cíclica"
+speed = 55.0
+radius = 16.0
+color = Color(0.62, 0.42, 0.95, 1)
+movement = ExtResource("1_bv52f")
+pattern_regular = ExtResource("2_vbrjp")

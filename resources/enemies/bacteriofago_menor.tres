@@ -1,12 +1,13 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="EnemyData" format=3]
 
 [ext_resource type="Script" path="res://scripts/enemies/enemy_data.gd" id="1"]
+[ext_resource type="Resource" path="res://resources/movements/oscilacion_suave.tres" id="1_aysa0"]
 [ext_resource type="Resource" path="res://resources/patterns/bacteriofago_regular.tres" id="2"]
 
 [resource]
 script = ExtResource("1")
 display_name = "Bacteriófago Menor"
 max_hp = 4
-sway_amplitude = 40.0
-sway_frequency = 0.35
+speed = 95.0
+movement = ExtResource("1_aysa0")
 pattern_regular = ExtResource("2")

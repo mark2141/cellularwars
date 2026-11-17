@@ -4,22 +4,21 @@ extends Resource
 
 @export var display_name: String = ""
 @export var max_hp: int = 3
-## Velocidad de descenso en píxeles por segundo.
+## Velocidad en píxeles por segundo cuando no va en formación.
 @export var speed: float = 0.0
 @export var radius: float = 18.0
 ## Escudos que quita al chocar con el jugador.
 @export var contact_damage: int = 1
 ## Provisional hasta tener sprites.
 @export var color: Color = Color(0.8, 0.3, 0.5)
+## Movimiento propio cuando no va en formación (vacío = línea recta).
+@export var movement: MovementPattern
 
+@export_group("Drops")
 ## Probabilidad (0 a 1) de soltar un escudo al morir.
 @export_range(0.0, 1.0) var shield_drop_chance: float = 0.15
 ## Probabilidad (0 a 1) de soltar una estrella al morir. Un enemigo suelta como mucho un drop.
 @export_range(0.0, 1.0) var star_drop_chance: float = 0.1
-
-@export_group("Oscilación (provisional, pasará a MovementPattern)")
-@export var sway_amplitude: float = 0.0
-@export var sway_frequency: float = 0.0
 
 @export_group("Patrones por rango")
 @export var pattern_regular: BulletPattern

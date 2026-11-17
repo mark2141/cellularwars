@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="MovementPattern" format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/movement_pattern.gd" id="1_w56en"]
+
+[resource]
+script = ExtResource("1_w56en")
+kind = 1
+amplitude = 40.0
+period = 2.8

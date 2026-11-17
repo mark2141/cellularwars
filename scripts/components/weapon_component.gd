@@ -12,6 +12,11 @@ signal fired(origin: Vector2)
 var _cooldown: float = 0.0
 
 
+## Retrasa el siguiente disparo (por ejemplo, para desfasar a un grupo).
+func delay(seconds: float) -> void:
+	_cooldown = max(_cooldown, seconds)
+
+
 func _physics_process(delta: float) -> void:
 	if _cooldown > 0.0:
 		_cooldown -= delta

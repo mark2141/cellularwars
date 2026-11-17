@@ -5,5 +5,5 @@
 [resource]
 script = ExtResource("1_w56en")
 kind = 1
-amplitude = 40.0
+amplitude = 70.0
 period = 2.8

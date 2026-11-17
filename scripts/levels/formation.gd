@@ -44,6 +44,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		_age += delta
 		_origin.x += _direction * data.sweep_speed * delta
+		_origin.y += data.descend_speed * delta
 		var reach := data.half_size().x + data.edge_margin
 		if _origin.x + reach > field.end.x or _origin.x - reach < field.position.x:
 			_origin.x = clampf(_origin.x, field.position.x + reach, field.end.x - reach)

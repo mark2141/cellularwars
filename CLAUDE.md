@@ -13,7 +13,7 @@ Actúa como arquitecto técnico y asistente de desarrollo. Prioriza soluciones l
 - **Género:** híbrido entre *Space Invaders* (oleadas descendentes en formación, barreras destructibles, ritmo táctico) y *bullet hell* accesible (patrones geométricos que siempre dejan pasillos visibles; sin saturación extrema).
 - **Modo Precisión (*Focus*):** reduce la velocidad de la nave y muestra su *hitbox* central exacta.
 - **Estrellas y láser:** los enemigos pueden soltar estrellas; al recoger 3, la nave lanza un láser gigante que limpia el escenario de enemigos y de balas. Sustituye desde el 2026-11-17 al sistema de *graze*, que queda descartado.
-- **Temática:** invasión microscópica. El jugador controla un nanobot médico (o leucocito modificado) que recorre el torrente sanguíneo y los órganos de un organismo infectado.
+- **Temática:** invasión microscópica. El jugador controla un nanobot que combate a nanobots y monstruos bacterianos en el torrente sanguíneo y los órganos de un organismo infectado. Aún sin definir: el aspecto de la nave, la historia y de quién es el cuerpo.
 - **Estética:** tonos biológicos profundos (rojos venosos, púrpuras, azules oscuros) con proyectiles bioluminiscentes (esporas, espinas celulares, descargas nerviosas).
 - **Plataforma de lanzamiento:** itch.io, con una única versión web jugable en navegador de PC y de Android, con controles táctiles. Un APK instalable queda como posible añadido posterior, no como objetivo inicial.
 
@@ -201,7 +201,18 @@ Que haya controles táctiles está decidido; el esquema concreto es una propuest
 
 - Al morir, un enemigo puede soltar una estrella. Se recoge chocando con ella, igual que el escudo.
 - Al recoger la tercera, la nave lanza automáticamente un láser gigante que elimina a todos los enemigos y borra todas las balas enemigas. El contador vuelve a 0.
-- Elegido por Claude, sin confirmar: un enemigo suelta como mucho un drop (escudo o estrella); los enemigos eliminados por el láser no sueltan nada; las estrellas no tienen tope porque se gastan al llegar a 3. Falta definir qué hace el láser contra un jefe.
+- El lanzamiento automático está confirmado por el equipo (2026-11-17): obliga a esquivar estrellas cuando no conviene gastar el láser.
+- Las estrellas son provisionales de aspecto; probablemente pasarán a ser celdas de energía o similar.
+- Elegido por Claude, sin confirmar: un enemigo suelta como mucho un drop; los enemigos eliminados por el láser no sueltan nada. Falta definir qué hace el láser contra un jefe.
+
+### Armas [Decidido, 2026-11-17]
+
+- El arma base es un disparo simple: una sola línea recta.
+- Las mejoras caen como drop de los enemigos, en una caja con la letra del arma (como en Contra o Metal Slug), para que el jugador decida si la recoge o la esquiva.
+- La primera mejora es el disparo doble (letra «D»).
+- Implementación: cada arma es un recurso `WeaponData` en `resources/weapons/`. `LevelData.weapon_drops` decide qué armas pueden caer en cada nivel, y `EnemyData.weapon_drop_chance` la probabilidad.
+- Elegido por Claude, sin confirmar: probabilidad del 5 %; la mejora sustituye al arma actual; nunca cae el arma que ya llevas; perder escudos no quita el arma; al reiniciar el nivel se vuelve al disparo simple.
+- Pendiente: qué otras armas habrá y sus letras.
 
 ### Estado del esqueleto (2026-11-16)
 
@@ -214,8 +225,8 @@ Ya existe en el repositorio. - Resolución base 720×1280 (decidida) en `project
 
 `scenes/main/main.tscn` ya es el nivel 1 sin jefe: reproduce `resources/levels/level_1.tres` (32 oleadas, 196 enemigos, 6:30). Al terminar muestra «Oleadas completadas / Jefe pendiente».
 
-- **Jugador** (`scripts/player/`, balance en `resources/player/player_default.tres`): movimiento, *Focus* (muestra la *hitbox*), escudos con invulnerabilidad y parpadeo tras cada impacto, contador de estrellas y arrastre táctil relativo.
-- **Drops** (`scripts/pickups/pickup.gd`, con tipo escudo o estrella): caen desde el enemigo muerto y se recogen por distancia. Las probabilidades están en `EnemyData`, por arquetipo.
+- **Jugador** (`scripts/player/`, balance en `resources/player/player_default.tres`): movimiento (velocidad 336, un 20 % menos que la primera versión, tras la prueba del equipo), *Focus* (muestra la *hitbox*), escudos con invulnerabilidad y parpadeo tras cada impacto, contador de estrellas y arrastre táctil relativo.
+- **Drops** (`scripts/pickups/pickup.gd`, con tipo escudo, estrella o arma): caen desde el enemigo muerto y se recogen por distancia. Las probabilidades están en `EnemyData`, por arquetipo.
 - **Láser** (`scripts/player/laser_beam.gd`): solo es el efecto visual; la limpieza la hace `main.gd`.
 - **`BulletManager`** (`scripts/bullets/`): arrays empaquetados, colisión por distancia y dibujo con círculos aditivos. Jugador, enemigos y el gestor deben ser hijos directos de `Playfield`.
 - **`BulletPattern`**: por ahora solo abanico y anillo. Faltan espiral y muro con huecos. Los tres patrones del nivel 1 son un disparo único recto hacia abajo.
@@ -224,7 +235,7 @@ Ya existe en el repositorio. - Resolución base 720×1280 (decidida) en `project
   - Espora Cíclica: baja trazando círculos.
   - Leucocito Zombi: resistente, baja en zigzag por los flancos, bala más grande.
 - **`MovementPattern`** (`resources/movements/`): recto, oscilación, círculo y zigzag, como desplazamiento sobre la trayectoria base.
-- **Formaciones** (`scripts/levels/formation.gd` + `FormationData`): rejilla tipo Space Invaders que entra desde arriba, barre de lado a lado bajando un escalón en cada borde y se retira a los 24 s.
+- **Formaciones** (`scripts/levels/formation.gd` + `FormationData`): rejilla tipo Space Invaders que entra desde arriba, barre de lado a lado mientras desciende de forma continua y un escalón en cada borde, hasta salir por abajo. El equipo pidió el 2026-11-17 que los enemigos bajen y se muevan más.
 - **Oleadas** (`scripts/levels/`): `LevelData` contiene una lista de `WaveEvent` (segundo, arquetipo, rango, formación o fila, punto de entrada, dirección, si dispara). `LevelRunner` las lanza por tiempo y, con `advance_when_clear`, adelanta el reloj a la siguiente oleada cuando no quedan enemigos. Se editan desde el inspector abriendo `level_1.tres`.
 - **Para probar un tramo:** el nodo `LevelRunner` de `main.tscn` tiene `debug_start_time` (segundos) para empezar el nivel más adelante. Dejarlo en 0 al hacer commit.
 
@@ -233,7 +244,7 @@ Provisional, a sustituir:
 - `TierData.tint` es un color plano; pasará a `Gradient` con el shader de paleta.
 - Todo se dibuja con formas por código y el HUD es una etiqueta de texto.
 - En táctil no hay todavía botón de *Focus* (llega con el HUD).
-- La tabla del nivel 1 habla de «primeros *power-ups*» en 3:00–5:00; por ahora los únicos drops son escudo y estrella, y caen desde el principio.
+- La tabla del nivel 1 habla de «primeros *power-ups*» en 3:00–5:00; por ahora todos los drops (escudo, estrella y arma) caen desde el principio.
 - El equipo dio por buenas el 2026-11-17 la cadencia de disparo, la velocidad de la nave y las probabilidades de drop (15 % escudo, 10 % estrella). La vida, velocidad y cadencia de los enemigos y la composición de las oleadas son una primera versión sin probar por el equipo.
 
 ## 8. Especificación de assets generados [Propuesto]
@@ -288,7 +299,7 @@ Pregunta al equipo antes de asumir cualquiera de estas.
 
 5. ~~Vida y fallo~~: resuelto el 2026-11-17, sistema de escudos (ver «Escudos» en la sección 7). Sustituye a las vidas decididas el día anterior. Probabilidad de drop confirmada en 15 %. Falta: segundos de invulnerabilidad tras un impacto (provisional: 2) y si los niveles 2 a 7 empiezan también con 3 escudos o conservan los del nivel anterior.
 6. ~~Habilidad del *graze*~~: resuelto el 2026-11-17, el *graze* se sustituye por estrellas que disparan un láser (ver sección 7). Probabilidad de drop de estrella confirmada en 10 %. Falta: efecto del láser sobre los jefes.
-7. *Power-ups*: tipos y si se conservan entre niveles.
+7. *Power-ups*: mejoras de arma decididas (ver «Armas» en la sección 7). Falta: lista de armas y si se conservan entre niveles.
 8. Progresión: ¿mejoras permanentes o tienda entre niveles?
 9. Puntuación: ¿multiplicador y tabla de récords?
 10. Dificultad: ¿una o varias?

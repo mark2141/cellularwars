@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("3_fqhyu")
 display_name = "Espora Cíclica"
-speed = 55.0
+speed = 75.0
 radius = 16.0
 color = Color(0.62, 0.42, 0.95, 1)
 movement = ExtResource("1_bv52f")

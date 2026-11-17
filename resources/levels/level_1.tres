@@ -1,0 +1,313 @@
+[gd_resource type="Resource" script_class="LevelData" format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/wave_event.gd" id="1_4u7ew"]
+[ext_resource type="Resource" path="res://resources/enemies/bacteriofago_menor.tres" id="2_d3w8w"]
+[ext_resource type="Resource" path="res://resources/formations/rejilla_5x2.tres" id="3_v6d2w"]
+[ext_resource type="Resource" path="res://resources/tiers/regular.tres" id="4_br0t4"]
+[ext_resource type="Resource" path="res://resources/formations/rejilla_6x3.tres" id="5_bqjqr"]
+[ext_resource type="Resource" path="res://resources/enemies/espora_ciclica.tres" id="6_cgn3d"]
+[ext_resource type="Resource" path="res://resources/formations/rejilla_6x2.tres" id="7_bbtr6"]
+[ext_resource type="Resource" path="res://resources/enemies/leucocito_zombi.tres" id="8_2dyce"]
+[ext_resource type="Script" path="res://scripts/levels/level_data.gd" id="9_h2q1g"]
+
+[sub_resource type="Resource" id="Resource_usjkt"]
+script = ExtResource("1_4u7ew")
+time = 3.0
+enemy = ExtResource("2_d3w8w")
+tier = ExtResource("4_br0t4")
+can_shoot = false
+formation = ExtResource("3_v6d2w")
+position = Vector2(360, 240)
+
+[sub_resource type="Resource" id="Resource_hvnto"]
+script = ExtResource("1_4u7ew")
+time = 28.0
+enemy = ExtResource("2_d3w8w")
+tier = ExtResource("4_br0t4")
+can_shoot = false
+position = Vector2(180, -40)
+count = 6
+spawn_interval = 0.7
+
+[sub_resource type="Resource" id="Resource_54p52"]
+script = ExtResource("1_4u7ew")
+time = 40.0
+enemy = ExtResource("2_d3w8w")
+tier = ExtResource("4_br0t4")
+can_shoot = false
+position = Vector2(540, -40)
+count = 6
+spawn_interval = 0.7
+
+[sub_resource type="Resource" id="Resource_cbuls"]
+script = ExtResource("1_4u7ew")
+time = 54.0
+enemy = ExtResource("2_d3w8w")
+tier = ExtResource("4_br0t4")
+can_shoot = false
+formation = ExtResource("5_bqjqr")
+position = Vector2(360, 300)
+
+[sub_resource type="Resource" id="Resource_4rs42"]
+script = ExtResource("1_4u7ew")
+time = 78.0
+enemy = ExtResource("2_d3w8w")
+tier = ExtResource("4_br0t4")
+can_shoot = false
+position = Vector2(120, -40)
+count = 5
+spawn_interval = 0.7
+
+[sub_resource type="Resource" id="Resource_j8bn2"]
+script = ExtResource("1_4u7ew")
+time = 78.0
+enemy = ExtResource("2_d3w8w")
+tier = ExtResource("4_br0t4")
+can_shoot = false
+position = Vector2(600, -40)
+count = 5
+spawn_interval = 0.7
+
+[sub_resource type="Resource" id="Resource_jwp53"]
+script = ExtResource("1_4u7ew")
+time = 92.0
+enemy = ExtResource("6_cgn3d")
+tier = ExtResource("4_br0t4")
+position = Vector2(180, -40)
+count = 3
+step = Vector2(180, 0)
+
+[sub_resource type="Resource" id="Resource_3mcnt"]
+script = ExtResource("1_4u7ew")
+time = 106.0
+enemy = ExtResource("2_d3w8w")
+tier = ExtResource("4_br0t4")
+formation = ExtResource("3_v6d2w")
+position = Vector2(360, 240)
+
+[sub_resource type="Resource" id="Resource_xd5nw"]
+script = ExtResource("1_4u7ew")
+time = 122.0
+enemy = ExtResource("6_cgn3d")
+tier = ExtResource("4_br0t4")
+position = Vector2(200, -40)
+count = 4
+spawn_interval = 1.6
+
+[sub_resource type="Resource" id="Resource_jh3hq"]
+script = ExtResource("1_4u7ew")
+time = 136.0
+enemy = ExtResource("6_cgn3d")
+tier = ExtResource("4_br0t4")
+position = Vector2(520, -40)
+count = 4
+spawn_interval = 1.6
+
+[sub_resource type="Resource" id="Resource_s8wyg"]
+script = ExtResource("1_4u7ew")
+time = 150.0
+enemy = ExtResource("2_d3w8w")
+tier = ExtResource("4_br0t4")
+formation = ExtResource("7_bbtr6")
+position = Vector2(360, 260)
+
+[sub_resource type="Resource" id="Resource_4iwpj"]
+script = ExtResource("1_4u7ew")
+time = 166.0
+enemy = ExtResource("6_cgn3d")
+tier = ExtResource("4_br0t4")
+position = Vector2(180, -40)
+count = 3
+step = Vector2(180, 0)
+
+[sub_resource type="Resource" id="Resource_67t5i"]
+script = ExtResource("1_4u7ew")
+time = 182.0
+enemy = ExtResource("8_2dyce")
+tier = ExtResource("4_br0t4")
+position = Vector2(130, -50)
+direction = Vector2(0.12, 1)
+
+[sub_resource type="Resource" id="Resource_1da5u"]
+script = ExtResource("1_4u7ew")
+time = 187.0
+enemy = ExtResource("8_2dyce")
+tier = ExtResource("4_br0t4")
+position = Vector2(590, -50)
+direction = Vector2(-0.12, 1)
+
+[sub_resource type="Resource" id="Resource_qivv5"]
+script = ExtResource("1_4u7ew")
+time = 200.0
+enemy = ExtResource("2_d3w8w")
+tier = ExtResource("4_br0t4")
+formation = ExtResource("7_bbtr6")
+position = Vector2(360, 240)
+
+[sub_resource type="Resource" id="Resource_jgvqx"]
+script = ExtResource("1_4u7ew")
+time = 206.0
+enemy = ExtResource("8_2dyce")
+tier = ExtResource("4_br0t4")
+position = Vector2(130, -50)
+count = 2
+spawn_interval = 2.6
+direction = Vector2(0.12, 1)
+
+[sub_resource type="Resource" id="Resource_oimsq"]
+script = ExtResource("1_4u7ew")
+time = 220.0
+enemy = ExtResource("6_cgn3d")
+tier = ExtResource("4_br0t4")
+position = Vector2(180, -40)
+count = 3
+step = Vector2(180, 0)
+
+[sub_resource type="Resource" id="Resource_cjkua"]
+script = ExtResource("1_4u7ew")
+time = 230.0
+enemy = ExtResource("8_2dyce")
+tier = ExtResource("4_br0t4")
+position = Vector2(590, -50)
+count = 3
+spawn_interval = 2.6
+direction = Vector2(-0.12, 1)
+
+[sub_resource type="Resource" id="Resource_k3vih"]
+script = ExtResource("1_4u7ew")
+time = 246.0
+enemy = ExtResource("8_2dyce")
+tier = ExtResource("4_br0t4")
+position = Vector2(130, -50)
+count = 3
+spawn_interval = 2.6
+direction = Vector2(0.12, 1)
+
+[sub_resource type="Resource" id="Resource_1etfx"]
+script = ExtResource("1_4u7ew")
+time = 258.0
+enemy = ExtResource("2_d3w8w")
+tier = ExtResource("4_br0t4")
+formation = ExtResource("5_bqjqr")
+position = Vector2(360, 300)
+
+[sub_resource type="Resource" id="Resource_83kgu"]
+script = ExtResource("1_4u7ew")
+time = 276.0
+enemy = ExtResource("6_cgn3d")
+tier = ExtResource("4_br0t4")
+position = Vector2(160, -40)
+count = 5
+spawn_interval = 1.4
+step = Vector2(100, 0)
+
+[sub_resource type="Resource" id="Resource_cr1ow"]
+script = ExtResource("1_4u7ew")
+time = 284.0
+enemy = ExtResource("8_2dyce")
+tier = ExtResource("4_br0t4")
+position = Vector2(130, -50)
+direction = Vector2(0.12, 1)
+
+[sub_resource type="Resource" id="Resource_02t1x"]
+script = ExtResource("1_4u7ew")
+time = 284.0
+enemy = ExtResource("8_2dyce")
+tier = ExtResource("4_br0t4")
+position = Vector2(590, -50)
+direction = Vector2(-0.12, 1)
+
+[sub_resource type="Resource" id="Resource_uvy7q"]
+script = ExtResource("1_4u7ew")
+time = 300.0
+enemy = ExtResource("2_d3w8w")
+tier = ExtResource("4_br0t4")
+position = Vector2(60, -40)
+count = 8
+spawn_interval = 0.5
+step = Vector2(85, 0)
+
+[sub_resource type="Resource" id="Resource_6xjc0"]
+script = ExtResource("1_4u7ew")
+time = 311.0
+enemy = ExtResource("2_d3w8w")
+tier = ExtResource("4_br0t4")
+position = Vector2(660, -40)
+count = 8
+spawn_interval = 0.5
+step = Vector2(-85, 0)
+
+[sub_resource type="Resource" id="Resource_eq047"]
+script = ExtResource("1_4u7ew")
+time = 322.0
+enemy = ExtResource("6_cgn3d")
+tier = ExtResource("4_br0t4")
+position = Vector2(85, -40)
+count = 6
+spawn_interval = 0.7
+step = Vector2(110, 0)
+
+[sub_resource type="Resource" id="Resource_ue3mf"]
+script = ExtResource("1_4u7ew")
+time = 334.0
+enemy = ExtResource("8_2dyce")
+tier = ExtResource("4_br0t4")
+position = Vector2(105, -50)
+count = 4
+spawn_interval = 1.3
+step = Vector2(170, 0)
+
+[sub_resource type="Resource" id="Resource_aqx77"]
+script = ExtResource("1_4u7ew")
+time = 346.0
+enemy = ExtResource("2_d3w8w")
+tier = ExtResource("4_br0t4")
+position = Vector2(60, -40)
+count = 8
+spawn_interval = 0.5
+step = Vector2(85, 0)
+
+[sub_resource type="Resource" id="Resource_bpay7"]
+script = ExtResource("1_4u7ew")
+time = 350.0
+enemy = ExtResource("2_d3w8w")
+tier = ExtResource("4_br0t4")
+position = Vector2(660, -40)
+count = 8
+spawn_interval = 0.5
+step = Vector2(-85, 0)
+
+[sub_resource type="Resource" id="Resource_7y0t6"]
+script = ExtResource("1_4u7ew")
+time = 362.0
+enemy = ExtResource("6_cgn3d")
+tier = ExtResource("4_br0t4")
+position = Vector2(635, -40)
+count = 6
+spawn_interval = 0.7
+step = Vector2(-110, 0)
+
+[sub_resource type="Resource" id="Resource_wale4"]
+script = ExtResource("1_4u7ew")
+time = 372.0
+enemy = ExtResource("8_2dyce")
+tier = ExtResource("4_br0t4")
+position = Vector2(615, -50)
+count = 4
+spawn_interval = 1.3
+step = Vector2(-170, 0)
+
+[sub_resource type="Resource" id="Resource_n5uy0"]
+script = ExtResource("1_4u7ew")
+time = 378.0
+enemy = ExtResource("2_d3w8w")
+tier = ExtResource("4_br0t4")
+position = Vector2(60, -40)
+count = 8
+spawn_interval = 0.5
+step = Vector2(85, 0)
+
+[resource]
+script = ExtResource("9_h2q1g")
+display_name = "Nivel 1: Infiltración inicial"
+events = Array[ExtResource("1_4u7ew")]([SubResource("Resource_usjkt"), SubResource("Resource_hvnto"), SubResource("Resource_54p52"), SubResource("Resource_cbuls"), SubResource("Resource_4rs42"), SubResource("Resource_j8bn2"), SubResource("Resource_jwp53"), SubResource("Resource_3mcnt"), SubResource("Resource_xd5nw"), SubResource("Resource_jh3hq"), SubResource("Resource_s8wyg"), SubResource("Resource_4iwpj"), SubResource("Resource_67t5i"), SubResource("Resource_1da5u"), SubResource("Resource_qivv5"), SubResource("Resource_jgvqx"), SubResource("Resource_oimsq"), SubResource("Resource_cjkua"), SubResource("Resource_k3vih"), SubResource("Resource_1etfx"), SubResource("Resource_83kgu"), SubResource("Resource_cr1ow"), SubResource("Resource_02t1x"), SubResource("Resource_uvy7q"), SubResource("Resource_6xjc0"), SubResource("Resource_eq047"), SubResource("Resource_ue3mf"), SubResource("Resource_aqx77"), SubResource("Resource_bpay7"), SubResource("Resource_7y0t6"), SubResource("Resource_wale4"), SubResource("Resource_n5uy0")])

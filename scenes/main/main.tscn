@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/core/main.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/core/playfield.gd" id="2"]
 [ext_resource type="Script" path="res://scripts/bullets/bullet_manager.gd" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="4"]
+[ext_resource type="Script" path="res://scripts/levels/level_runner.gd" id="5"]
+[ext_resource type="Resource" path="res://resources/levels/level_1.tres" id="6"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1")
@@ -17,9 +19,24 @@ script = ExtResource("2")
 z_index = 1
 script = ExtResource("3")
 
+[node name="LevelRunner" type="Node" parent="."]
+script = ExtResource("5")
+level = ExtResource("6")
+
 [node name="HUD" type="CanvasLayer" parent="."]
 
 [node name="Status" type="Label" parent="HUD"]
 offset_left = 12.0
 offset_top = 8.0
-text = "Vidas"
+text = "Escudos"
+
+[node name="Message" type="Label" parent="HUD"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 40
+text = "Mensaje"
+horizontal_alignment = 1
+vertical_alignment = 1

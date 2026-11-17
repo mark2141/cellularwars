@@ -208,24 +208,31 @@ Ya existe en el repositorio. - Resolución base 720×1280 (decidida) en `project
 - Capas de física 2D: 1 jugador, 2 enemigos, 3 disparos_jugador, 4 barreras, 5 powerups (constantes en `scripts/core/layers.gd`).
 - Carpetas: `scenes/`, `scripts/components/`, `scripts/core/`, `resources/`, `assets/`, `shaders/`, `tools/` (Python; Godot la ignora).
 
-### Estado del prototipo jugable (2026-11-16)
+### Estado del nivel 1 (2026-11-17)
 
-`scenes/main/main.tscn` es una escena de pruebas, no un nivel: una fila de 5 Bacteriófagos Menores que reaparece al eliminarla.
+`scenes/main/main.tscn` ya es el nivel 1 sin jefe: reproduce `resources/levels/level_1.tres` (32 oleadas, 196 enemigos, 6:30). Al terminar muestra «Oleadas completadas / Jefe pendiente».
 
 - **Jugador** (`scripts/player/`, balance en `resources/player/player_default.tres`): movimiento, *Focus* (muestra la *hitbox*), escudos con invulnerabilidad y parpadeo tras cada impacto, contador de estrellas y arrastre táctil relativo.
-- **Drops** (`scripts/pickups/pickup.gd`, con tipo escudo o estrella): caen desde el enemigo muerto y se recogen por distancia. Las probabilidades están en `EnemyData` (`shield_drop_chance` y `star_drop_chance`), por arquetipo.
+- **Drops** (`scripts/pickups/pickup.gd`, con tipo escudo o estrella): caen desde el enemigo muerto y se recogen por distancia. Las probabilidades están en `EnemyData`, por arquetipo.
 - **Láser** (`scripts/player/laser_beam.gd`): solo es el efecto visual; la limpieza la hace `main.gd`.
 - **`BulletManager`** (`scripts/bullets/`): arrays empaquetados, colisión por distancia y dibujo con círculos aditivos. Jugador, enemigos y el gestor deben ser hijos directos de `Playfield`.
-- **`BulletPattern`**: por ahora solo abanico (también disparo único apuntado) y anillo. Faltan espiral y muro con huecos.
-- **Enemigo** (`scripts/enemies/`): `Enemy.tscn` + `EnemyData` + `TierData` como en la propuesta. Solo existen el Bacteriófago Menor y el rango Regular.
+- **`BulletPattern`**: por ahora solo abanico y anillo. Faltan espiral y muro con huecos. Los tres patrones del nivel 1 son un disparo único recto hacia abajo.
+- **Enemigos** (`scripts/enemies/`): `Enemy.tscn` + `EnemyData` + `TierData`. Existen los tres del nivel 1, en rango Regular:
+  - Bacteriófago Menor: va en formación o en fila con oscilación suave.
+  - Espora Cíclica: baja trazando círculos.
+  - Leucocito Zombi: resistente, baja en zigzag por los flancos, bala más grande.
+- **`MovementPattern`** (`resources/movements/`): recto, oscilación, círculo y zigzag, como desplazamiento sobre la trayectoria base.
+- **Formaciones** (`scripts/levels/formation.gd` + `FormationData`): rejilla tipo Space Invaders que entra desde arriba, barre de lado a lado bajando un escalón en cada borde y se retira a los 24 s.
+- **Oleadas** (`scripts/levels/`): `LevelData` contiene una lista de `WaveEvent` (segundo, arquetipo, rango, formación o fila, punto de entrada, dirección, si dispara). `LevelRunner` las lanza por tiempo. Se editan desde el inspector abriendo `level_1.tres`.
+- **Para probar un tramo:** el nodo `LevelRunner` de `main.tscn` tiene `debug_start_time` (segundos) para empezar el nivel más adelante. Dejarlo en 0 al hacer commit.
 
 Provisional, a sustituir:
 
-- La oscilación del enemigo vive en `EnemyData`; pasará a `MovementPattern`.
 - `TierData.tint` es un color plano; pasará a `Gradient` con el shader de paleta.
 - Todo se dibuja con formas por código y el HUD es una etiqueta de texto.
 - En táctil no hay todavía botón de *Focus* (llega con el HUD).
-- El equipo dio por buenas el 2026-11-17 la cadencia de disparo, la velocidad de la nave y las probabilidades de drop (15 % escudo, 10 % estrella). El resto del balance es inicial.
+- La tabla del nivel 1 habla de «primeros *power-ups*» en 3:00–5:00; por ahora los únicos drops son escudo y estrella, y caen desde el principio.
+- El equipo dio por buenas el 2026-11-17 la cadencia de disparo, la velocidad de la nave y las probabilidades de drop (15 % escudo, 10 % estrella). La vida, velocidad y cadencia de los enemigos y la composición de las oleadas son una primera versión sin probar por el equipo.
 
 ## 8. Especificación de assets generados [Propuesto]
 

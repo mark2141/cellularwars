@@ -44,6 +44,11 @@ func _physics_process(delta: float) -> void:
 	position.y += data.speed * tier.speed_mult * delta
 	if position.y > field.end.y + data.radius * 2.0:
 		queue_free()
+	elif player and player.is_targetable():
+		# Chocar con el cuerpo del enemigo quita un escudo; el enemigo sigue vivo.
+		var reach := data.radius + player.hitbox.radius
+		if position.distance_squared_to(player.position) <= reach * reach:
+			player.hitbox.hit(data.contact_damage)
 
 
 func _on_fired(_origin: Vector2) -> void:

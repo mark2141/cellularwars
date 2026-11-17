@@ -6,4 +6,3 @@
 script = ExtResource("1")
 interval = 2.5
 speed = 150.0
-aimed = true

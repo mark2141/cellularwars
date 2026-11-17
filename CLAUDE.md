@@ -74,7 +74,7 @@ En los niveles 4 a 6 los jefes regresan con patrones evolucionados y mayor densi
 
 | # | Arquetipo | Categoría | Rol táctico de la categoría |
 |---|---|---|---|
-| 1 | Bacteriófago Menor | Enjambre base | Formaciones clásicas, movimiento oscilante, disparos guiados lentos |
+| 1 | Bacteriófago Menor | Enjambre base | Formaciones clásicas, movimiento oscilante, disparos lentos (en el nivel 1, siempre en línea recta) |
 | 2 | Espora Cíclica | Enjambre base | |
 | 3 | Leucocito Zombi | Enjambre base | |
 | 4 | Gusano Capilar | Asalto e intermedios | Cuerpos segmentados, escudos temporales, tanques con ondas circulares |
@@ -104,6 +104,10 @@ Solo el nivel 1 está decidido (arquetipos 1 a 3, rango Regular). El resto es un
 ## 6. Nivel 1 [Decidido]
 
 Curva introductoria de unos 8 minutos. Enemigos: Bacteriófago Menor, Espora Cíclica y Leucocito Zombi, en rango Regular.
+
+En el nivel 1 los disparos enemigos van en línea recta: ninguno apunta al jugador ni lo sigue (decidido el 2026-11-17).
+
+**Foco actual del equipo:** solo el nivel 1. No trabajar en los niveles 2 a 7 hasta que lo pidan.
 
 | Tiempo | Contenido |
 |---|---|
@@ -169,11 +173,9 @@ class_name TierData extends Resource
 - Brillo bioluminiscente con mezcla aditiva y halo en el propio sprite, sin posprocesado.
 - Los SVG se rasterizan al importarlos; hay que fijar la escala de importación según la resolución base.
 
-### Resolución y disposición [Propuesto, sin confirmar]
+### Resolución y disposición [Decidido, 2026-11-17]
 
-La propuesta original (campo de 720×960 con el HUD a los lados, en ventana de 1280×960) no encaja en un teléfono en vertical, así que queda sustituida por esta:
-
-- Campo de juego vertical más alto, por ejemplo 720×1280. Cambia el ritmo de las oleadas respecto a 720×960 porque hay más recorrido vertical.
+- Campo de juego vertical de 720×1280.
 - Disposición adaptable: en escritorio el campo va centrado con el HUD a los lados; en móvil ocupa todo el ancho con el HUD arriba y abajo. El código de juego es el mismo; solo cambian el HUD y la capa de entrada.
 
 ### Controles táctiles [Propuesto]
@@ -201,10 +203,8 @@ Que haya controles táctiles está decidido; el esquema concreto es una propuest
 
 ### Estado del esqueleto (2026-11-16)
 
-Ya existe en el repositorio. Usa valores **provisionales** que el equipo aún no ha confirmado; cambiarlos es barato:
-
-- Resolución base 720×1280 en `project.godot`. `scripts/core/playfield.gd` centra el campo y deja el espacio sobrante para el HUD (a los lados en escritorio, arriba y abajo en móvil).
-- Acciones de entrada: `move_*` (flechas y WASD), `focus` (Shift), `shoot` (Espacio, manteniendo; decidido), `pause` (Esc). Sin mando por ahora.
+Ya existe en el repositorio. - Resolución base 720×1280 (decidida) en `project.godot`. `scripts/core/playfield.gd` centra el campo y deja el espacio sobrante para el HUD (a los lados en escritorio, arriba y abajo en móvil).
+- Acciones de entrada: `move_*` (flechas y WASD), `focus` (Shift), `shoot` (Espacio, manteniendo; decidido), `pause` (Esc). Sin mando por ahora; el equipo quiere integrarlo más adelante, así que la entrada debe pasar siempre por acciones del `InputMap`.
 - Capas de física 2D: 1 jugador, 2 enemigos, 3 disparos_jugador, 4 barreras, 5 powerups (constantes en `scripts/core/layers.gd`).
 - Carpetas: `scenes/`, `scripts/components/`, `scripts/core/`, `resources/`, `assets/`, `shaders/`, `tools/` (Python; Godot la ignora).
 
@@ -225,7 +225,7 @@ Provisional, a sustituir:
 - `TierData.tint` es un color plano; pasará a `Gradient` con el shader de paleta.
 - Todo se dibuja con formas por código y el HUD es una etiqueta de texto.
 - En táctil no hay todavía botón de *Focus* (llega con el HUD).
-- Todos los valores de balance son iniciales y sin probar por el equipo.
+- El equipo dio por buenas el 2026-11-17 la cadencia de disparo, la velocidad de la nave y las probabilidades de drop (15 % escudo, 10 % estrella). El resto del balance es inicial.
 
 ## 8. Especificación de assets generados [Propuesto]
 
@@ -270,15 +270,15 @@ Pregunta al equipo antes de asumir cualquiera de estas.
 
 **Bloquean el esqueleto**
 
-1. Resolución y formato: confirmar la proporción del campo de juego (propuesta: 720×1280 con disposición adaptable, ver sección 7).
+1. ~~Resolución y formato~~: resuelto el 2026-11-17, campo de 720×1280 con disposición adaptable (ver sección 7).
 2. ~~Plataformas~~: resuelto el 2026-11-16, versión web única para PC y Android con controles táctiles (ver sección 1).
-3. Controles: decidido teclado con disparo manteniendo Espacio (2026-11-17; antes Z) y táctil con disparo automático mientras se toca. Falta confirmar el resto del esquema táctil (sección 7) y si habrá mando.
+3. Controles: decidido teclado con disparo manteniendo Espacio (2026-11-17; antes Z) y táctil con disparo automático mientras se toca. Mando: por ahora no, con intención de añadirlo más adelante. Falta confirmar el resto del esquema táctil (sección 7).
 4. ~~Lenguaje~~: resuelto el 2026-11-16, GDScript (ver sección 2).
 
 **Sistemas del jugador**
 
-5. ~~Vida y fallo~~: resuelto el 2026-11-17, sistema de escudos (ver «Escudos» en la sección 7). Sustituye a las vidas decididas el día anterior. Falta: segundos de invulnerabilidad tras un impacto (provisional: 2), probabilidad de drop (provisional: 15 %) y si los niveles 2 a 7 empiezan también con 3 escudos o conservan los del nivel anterior.
-6. ~~Habilidad del *graze*~~: resuelto el 2026-11-17, el *graze* se sustituye por estrellas que disparan un láser (ver sección 7). Falta: probabilidad de drop de estrella (provisional: 10 %) y efecto del láser sobre los jefes.
+5. ~~Vida y fallo~~: resuelto el 2026-11-17, sistema de escudos (ver «Escudos» en la sección 7). Sustituye a las vidas decididas el día anterior. Probabilidad de drop confirmada en 15 %. Falta: segundos de invulnerabilidad tras un impacto (provisional: 2) y si los niveles 2 a 7 empiezan también con 3 escudos o conservan los del nivel anterior.
+6. ~~Habilidad del *graze*~~: resuelto el 2026-11-17, el *graze* se sustituye por estrellas que disparan un láser (ver sección 7). Probabilidad de drop de estrella confirmada en 10 %. Falta: efecto del láser sobre los jefes.
 7. *Power-ups*: tipos y si se conservan entre niveles.
 8. Progresión: ¿mejoras permanentes o tienda entre niveles?
 9. Puntuación: ¿multiplicador y tabla de récords?
